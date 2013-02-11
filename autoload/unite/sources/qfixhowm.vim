@@ -27,7 +27,9 @@ function! s:source.action_table.delete.func(candidates)
 endfunction
 
 function! g:my_qfixhowm_sort(a, b)
-	return getftime(a:a.filename) < getftime(a:b.filename)
+	let t1 = getftime(a:a.filename)
+	let t2 = getftime(a:b.filename)
+	return t1 == t2 ? 0 : t1 < t2 ? 1 : -1
 endfunction
 
 function! s:source.gather_candidates(args, context)
