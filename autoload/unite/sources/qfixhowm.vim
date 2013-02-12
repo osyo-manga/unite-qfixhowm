@@ -26,32 +26,25 @@ function! s:source.action_table.delete.func(candidates)
 	endif
 endfunction
 
-function! g:my_qfixhowm_sort(a, b)
-	let t1 = getftime(a:a.filename)
-	let t2 = getftime(a:b.filename)
-	return t1 == t2 ? 0 : t1 < t2 ? 1 : -1
-endfunction
-
 function! s:source.gather_candidates(args, context)
-" 	call qfixmemo#ListCmd()
-" 	if get(a:args, 0, "") == "close"
-" 		close
-" 	endif
 	let tmp = get(g:, "QFixListAltOpen", 0)
-	let g:QFixListAltOpen = 1
-	if get(a:args, 0, "") == "nocache"
-		let list = qfixmemo#ListCmd("nocache")
-	else
-		let list = qfixmemo#ListCmd()
-	endif
-	let g:QFixListAltOpen = tmp
+	try
+		let g:QFixListAltOpen = 1
+		if get(a:args, 0, "") == "nocache"
+			let list = qfixmemo#ListCmd("nocache")
+		else
+			let list = qfixmemo#ListCmd()
+		endif
+	finally
+		let g:QFixListAltOpen = tmp
+	endtry
 	let new_memo = [{
 \		"word" : "[ new memo ]",
 \		"default_action" : "new_memo",
 \		"kind" : "qfixlist_new_memo"
 \	}]
 
-	return new_memo + map(sort(copy(list), "g:my_qfixhowm_sort"), '{
+	return new_memo + map(copy(list), '{
 \		"word" : "(".fnamemodify(v:val.filename, ":t:r").") ".v:val.text,
 \		"kind" : "file",
 \		"action__path" : v:val.filename
@@ -78,8 +71,9 @@ call unite#define_kind(s:kind)
 unlet s:kind
 
 
-function! QFixListAltOpen(qflist, dir)
-	return a:qflist
-endfunction
-
+if !exists("*QFixListAltOpen")
+	function! QFixListAltOpen(qflist, dir)
+		return a:qflist
+	endfunction
+endif
 
