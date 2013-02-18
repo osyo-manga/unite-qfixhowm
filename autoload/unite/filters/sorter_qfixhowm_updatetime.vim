@@ -11,7 +11,7 @@ let s:sorter = {
 \}
 
 function! s:sorter.filter(candidates, context)
-	return [get(a:candidates, 0, {})] + reverse(unite#util#sort_by(a:candidates[1:], 'getftime(v:val.action__path)'))
+	return reverse(unite#util#sort_by(a:candidates, 'has_key(v:val, "action__path") ? getftime(v:val.action__path) : 0x7fffffff'))
 endfunction
 
 
