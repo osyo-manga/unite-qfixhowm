@@ -58,13 +58,6 @@ endif
 let s:source_new = {
 \	"name" : "qfixhowm/new",
 \	"description" : "qfixhowm new",
-\	"action_table" : {
-\		"new_memo" : {
-\			"description" : "new qfixmemo",
-\			"is_invalidate_cache" : 1,
-\			"is_selectable" : 0,
-\		}
-\	}
 \}
 
 
@@ -72,14 +65,10 @@ function! s:source_new.gather_candidates(args, context)
 	return [{
 \		"word" : "[ new memo ]",
 \		"default_action" : "new_memo",
+\		"kind" : "qfixlist_new_memo"
 \	}]
 endfunction
 
-
-function! s:source_new.action_table.new_memo.func(candidates)
-	execute g:unite_qfixhowm_new_memo_cmd
-	call qfixmemo#EditNew()
-endfunction
 
 
 let g:unite_qfixhowm_new_memo_cmd = get(g:, "unite_qfixhowm_new_memo_cmd", "")
