@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function! unite#sources#qfixhowm#define()
-	return s:source
+	return [s:source, s:source_new]
 endfunction
 
 let s:source = {
@@ -38,13 +38,8 @@ function! s:source.gather_candidates(args, context)
 	finally
 		let g:QFixListAltOpen = tmp
 	endtry
-	let new_memo = [{
-\		"word" : "[ new memo ]",
-\		"default_action" : "new_memo",
-\		"kind" : "qfixlist_new_memo"
-\	}]
 
-	return new_memo + map(copy(list), '{
+	return map(copy(list), '{
 \		"word" : "(".fnamemodify(v:val.filename, ":t:r").") ".v:val.text,
 \		"kind" : "file",
 \		"action__path" : v:val.filename
@@ -52,28 +47,42 @@ function! s:source.gather_candidates(args, context)
 endfunction
 
 
-let s:kind = {
-\	"name" : "qfixlist_new_memo",
-\	"default_action" : "new_memo",
-\	"action_table" : {
-\		"new_memo" : {
-\			"is_selectable" : 0,
-\		}
-\	}
-\}
-
-function! s:kind.action_table.new_memo.func(candidates)
-	tabnew
-	call qfixmemo#EditNew()
-endfunction
-
-call unite#define_kind(s:kind)
-unlet s:kind
-
 
 if !exists("*QFixListAltOpen")
 	function! QFixListAltOpen(qflist, dir)
 		return a:qflist
 	endfunction
 endif
+
+
+let s:source_new = {
+\	"name" : "qfixhowm/new",
+\	"description" : "qfixhowm new",
+\	"action_table" : {
+\		"new_memo" : {
+\			"description" : "new qfixmemo",
+\			"is_invalidate_cache" : 1,
+\			"is_selectable" : 0,
+\		}
+\	}
+\}
+
+
+function! s:source_new.gather_candidates(args, context)
+	return [{
+\		"word" : "[ new memo ]",
+\		"default_action" : "new_memo",
+\	}]
+endfunction
+
+
+function! s:source_new.action_table.new_memo.func(candidates)
+	execute g:unite_qfixhowm_new_memo_cmd
+	call qfixmemo#EditNew()
+endfunction
+
+
+let g:unite_qfixhowm_new_memo_cmd = get(g:, "unite_qfixhowm_new_memo_cmd", "")
+
+
 
