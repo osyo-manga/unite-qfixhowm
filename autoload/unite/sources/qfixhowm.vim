@@ -7,24 +7,8 @@ endfunction
 let s:source = {
 \	"name" : "qfixhowm",
 \	"description" : "qfixhowm",
-\	"action_table" : {
-\		"delete" : {
-\			"description" : "delete qfixmemo",
-\			"is_selectable" : 1,
-\			"is_invalidate_cache" : 1,
-\			"is_quit" : 0
-\		}
-\	}
 \}
 
-function! s:source.action_table.delete.func(candidates)
-	let input = input("Really force delete files? [yes/no]")
-	if input == "yes" || input == "y"
-		for candidate in a:candidates
-			call delete(candidate.action__path)
-		endfor
-	endif
-endfunction
 
 function! s:source.gather_candidates(args, context)
 	let tmp = get(g:, "QFixListAltOpen", 0)
@@ -41,7 +25,7 @@ function! s:source.gather_candidates(args, context)
 
 	return map(copy(list), '{
 \		"word" : "(".fnamemodify(v:val.filename, ":t:r").") ".v:val.text,
-\		"kind" : "file",
+\		"kind" : "qfixhowm",
 \		"action__path" : v:val.filename
 \	}')
 endfunction
