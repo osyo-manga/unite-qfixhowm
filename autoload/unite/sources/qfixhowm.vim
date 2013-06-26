@@ -7,6 +7,12 @@ endfunction
 let s:source = {
 \	"name" : "qfixhowm",
 \	"description" : "qfixhowm",
+\	"action_table" : {"qfixhowm" : {} }
+\}
+
+let s:source.action_table["qfixhowm"].preview = {
+\	"description" : "preview qfixhowm text",
+\	"is_quit" : 0,
 \}
 
 
@@ -30,6 +36,11 @@ function! s:source.gather_candidates(args, context)
 \	}')
 endfunction
 
+function! s:source.action_table["qfixhowm"].preview.func(candidate)
+	if filereadable(a:candidate.action__path)
+		call unite#util#smart_execute_command('pedit', a:candidate.action__path)
+	endif
+endfunction
 
 
 if !exists("*QFixListAltOpen")
