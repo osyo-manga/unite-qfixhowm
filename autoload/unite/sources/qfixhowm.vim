@@ -55,7 +55,4 @@ endfunction
 
 
 
-let g:unite_qfixhowm_new_memo_cmd = get(g:, "unite_qfixhowm_new_memo_cmd", "")
-
-
 

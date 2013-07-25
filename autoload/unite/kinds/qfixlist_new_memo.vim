@@ -3,6 +3,10 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+
+let g:unite_qfixhowm_new_memo_cmd = get(g:, "unite_qfixhowm_new_memo_cmd", "")
+
+
 function! unite#kinds#qfixlist_new_memo#define()
 	return s:kind
 endfunction
@@ -19,7 +23,7 @@ let s:kind = {
 \}
 
 function! s:kind.action_table.new_memo.func(candidates)
-	tabnew
+	execute g:unite_qfixhowm_new_memo_cmd
 	call qfixmemo#EditNew()
 endfunction
 
