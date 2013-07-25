@@ -18,6 +18,7 @@ let s:kind = {
 \	"action_table" : {
 \		"new_memo" : {
 \			"is_selectable" : 0,
+\			"is_tab" : 1,
 \		}
 \	}
 \}
