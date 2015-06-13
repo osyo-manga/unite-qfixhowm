@@ -31,6 +31,14 @@ function! s:source.gather_candidates(args, context)
 endfunction
 
 
+
+if !exists("*QFixListAltOpen")
+	function! QFixListAltOpen(qflist, dir)
+		return a:qflist
+	endfunction
+endif
+
+
 let s:source_new = {
 \	"name" : "qfixhowm/new",
 \	"description" : "qfixhowm new",
